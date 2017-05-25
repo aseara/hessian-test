@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <!-- 应用名称 -->
+    <display-name>hessian</display-name>
+
+    <welcome-file-list>
+        <welcome-file>/</welcome-file>
+    </welcome-file-list>
+
+    <!-- 初始化参数 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:spring/applicationContext-*.xml
+        </param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>hessian-service</servlet-name>
+        <servlet-class>com.caucho.hessian.server.HessianServlet</servlet-class>
+        <!-- 服务实现类 -->
+        <init-param>
+            <param-name>home-class</param-name>
+            <param-value>com.aseara.github.hessian.service.HelloServiceProxy</param-value>
+        </init-param>
+        <!-- 服务接口 -->
+        <init-param>
+            <param-name>home-api</param-name>
+            <param-value>com.aseara.github.hessian.service.HelloService</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hessian-service</servlet-name>
+        <url-pattern>/hessian</url-pattern>
+    </servlet-mapping>
+
+    <!-- spring mvc -->
+    <servlet>
+        <servlet-name>springServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath*:/spring/spring-mvc-*.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 装载 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 处理缓冲泄露 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+</web-app>

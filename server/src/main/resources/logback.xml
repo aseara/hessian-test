@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- sends logs to logback-beagle -->
+    <consolePlugin />
+    <property name="APP_NAME" value="zookeeper-test" />
+    <property name="LOG_DIR" value="target/" />
+    <property name="LOG_REF" value="STDOUT" />  <!-- STDOUT FILE -->
+    <contextName>${APP_NAME}</contextName>
+
+    <appender name="FILE"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{100} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <Encoding>UTF-8</Encoding>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
+                %logger{36}-%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.aseara" level="DEBUG" />
+
+    <root level="INFO">
+        <appender-ref ref="${LOG_REF}" />
+    </root>
+
+</configuration>  
